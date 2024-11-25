@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-
+const userRoutes=require('./Router/userRoutes')
 const app = express();
 dotenv.config(); // Charge les variables d'environnement depuis le fichier .env
 
@@ -12,6 +12,8 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.send("API is running");
 });
+
+app.use("user/",userRoutes)
 
 // Fonction pour connecter à MongoDB
 const connectDB = async () => {
