@@ -1,29 +1,36 @@
 const mongoose = require('mongoose');
-
-// Définir le schéma utilisateur
-const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: [true, "Le nom est requis"],
-        trim: true, // Supprime les espaces inutiles
-        minlength: [3, "Le nom doit comporter au moins 3 caractères"]
+const bcrypt= require('bcryptjs')
+const userSchema = mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        password: {
+            type: String,
+            required: [true, "Le mot de passe est requis"],
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false,
+        },
     },
-    email: {
-        type: String,
-        required: [true, "L'email est requis"],
-        unique: true, // Assure que chaque email est unique
-        match: [/\S+@\S+\.\S+/, "Veuillez entrer un email valide"] // Validation de format
-    },
-    password: {
-        type: String,
-        required: [true, "Le mot de passe est requis"],
-        minlength: [6, "Le mot de passe doit comporter au moins 6 caractères"]
+    {
+        timestamps: true,
     }
-}, {
-    timestamps: true // Ajoute automatiquement `createdAt` et `updatedAt`
-});
+);
 
-// Créer le modèle utilisateur
+userSchema.methods.matchPassword = async function (enteredPassword) {
+    
+    return await bcrypt.compare(enteredPassword, this.password);
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

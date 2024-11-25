@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
     res.send("API is running");
 });
 
-app.use("user/",userRoutes)
+app.use("/user",userRoutes)
 
 // Fonction pour connecter à MongoDB
 const connectDB = async () => {
