@@ -93,7 +93,25 @@ const loginController = ExpressAsyncHandler(async (req, res) => {
     }
 });
 
+const fetchAllUsersController = ExpressAsyncHandler(async (req, res) => {
+    try {
+        // Récupérer tous les utilisateurs
+        const users = await userModel.find({}).select('-password');
+ // Utiliser un filtre vide pour récupérer tous les documents sans mot de passe
+
+        if (!users || users.length === 0) {
+            res.status(404).json({ message: "Aucun utilisateur trouvé dans la base de données" });
+        } else {
+            res.status(200).json(users); // Retourner tous les utilisateurs sous forme de tableau
+        }
+    } catch (error) {
+        console.error("Erreur lors de la récupération des utilisateurs :", error);
+        res.status(500).json({ message: "Erreur lors de la récupération des utilisateurs", error: error.message });
+    }
+});
+
 module.exports = {
     registerController,
     loginController,
+    fetchAllUsersController
 };
