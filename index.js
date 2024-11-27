@@ -35,7 +35,7 @@ const connectDB = async () => {
 connectDB();
 
 // Définir le port
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8080;
 
 // Lancement du serveur
 app.listen(PORT, () => {

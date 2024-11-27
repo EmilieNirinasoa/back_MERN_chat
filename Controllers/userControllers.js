@@ -50,7 +50,7 @@ const registerController = ExpressAsyncHandler(async (req, res) => {
 
         res.status(201).json({
             message: "Utilisateur créé avec succès",
-            user: {
+            data: {
                 id: user._id,
                 name: user.name,
                 email: user.email,
