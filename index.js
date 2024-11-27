@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const mongoose = require('mongoose');
 const cors= require('cors')
 const userRoutes=require('./Router/userRoutes')
+const chatRoutes=require('./Router/chatRoutes')
+const messageRoutes=require('./Router/messageRoutes')
 const app = express();
 app.use(cors())
 dotenv.config(); // Charge les variables d'environnement depuis le fichier .env
@@ -16,7 +18,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user",userRoutes)
-
+app.use("/chat",chatRoutes)
+app.use("/message",messageRoutes)
 // Fonction pour connecter à MongoDB
 const connectDB = async () => {
     try {
