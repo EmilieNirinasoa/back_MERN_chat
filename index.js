@@ -5,8 +5,12 @@ const cors= require('cors')
 const userRoutes=require('./Router/userRoutes')
 const chatRoutes=require('./Router/chatRoutes')
 const messageRoutes=require('./Router/messageRoutes')
+const { createServer } = require("http");
+const { Server } = require("socket.io");
 const app = express();
-app.use(cors())
+app.use(cors({
+    origin:"*",
+}))
 dotenv.config(); // Charge les variables d'environnement depuis le fichier .env
 
 // Middleware pour parser les requêtes JSON
@@ -35,9 +39,44 @@ const connectDB = async () => {
 connectDB();
 
 // Définir le port
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
 // Lancement du serveur
-app.listen(PORT, () => {
+const server=app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}...`);
 });
+
+const io = new Server(server, { 
+    cors:{
+        origin:"*",
+    },
+    pingTimeout:60000
+});
+
+io.on("connection", (socket) => {
+ socket.on("setup",(user)=>{
+    socket.join(user.data._id);
+    socket.emit("connectzd")
+ });
+ socket.on("join chat",(room)=>{
+    socket.join(room);
+    socket.emit("room",room)
+ });
+ socket.on("new message",(newMessagesStatus)=>{
+    var chat= newMessagesStatus.chat;
+    if (!chat.users) {
+        return console.log('chat.users not defined')
+    }
+    chat.users.forEach((users) => {
+        if (user._id == newMessagesStatus.sender._id) {
+            return;
+        }
+        socket.in(user._id).emit("message received",newMessageReceived)
+    });
+ });
+
+ 
+
+
+});
+

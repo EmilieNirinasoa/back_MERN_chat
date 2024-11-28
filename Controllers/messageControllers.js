@@ -4,6 +4,7 @@ const Message = require('../modals/messageModel');
 
 // Fonction pour récupérer tous les messages d'un chat
 const allMessages = asyncHandler(async (req, res) => {
+    
     try {
         const messages = await Message.find({ chat: req.params.chatId })
             .populate("sender", "name email")
