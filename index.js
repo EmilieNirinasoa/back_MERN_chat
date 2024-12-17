@@ -9,7 +9,7 @@ const { createServer } = require("http");
 const { Server } = require("socket.io");
 const app = express();
 app.use(cors({
-    origin:"*",
+    origin:"https://chat-mern-front.vercel.app",
 }))
 dotenv.config(); // Charge les variables d'environnement depuis le fichier .env
 
